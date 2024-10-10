@@ -54,5 +54,6 @@ function App() {
     </Router>
   );
 }
-export const backendAPI: string = process.env.REACT_BACKEND_URL || "http://localhost:4500"; // Default API URL
+// export const backendAPI: string = process.env.REACT_BACKEND_URL || "http://localhost:4500"; // Default API URL/
+export const backendAPI: string = "https://credit-sea-assignment-backend.vercel.app"; // Default API URL
 export default App;
