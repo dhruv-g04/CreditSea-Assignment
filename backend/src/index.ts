@@ -8,7 +8,15 @@ dotenv.config();
 
 const app: Express = express();
 app.use(express.json());
-app.use(cors()); // Use CORS with default options to allow all origins
+// Configure CORS options
+const corsOptions = {
+  origin: "https://credit-sea-assignment-three.vercel.app", // Allow only this origin
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
+  credentials: true, // Allow credentials (cookies, authorization headers)
+};
+
+app.use(cors(corsOptions)); // Use CORS with specified options
+
 app.use('/api', loanRoutes);
 
 // Use the PORT from environment variables or default to 4000
