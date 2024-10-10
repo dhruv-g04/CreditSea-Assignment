@@ -9,11 +9,29 @@ dotenv.config();
 const app: Express = express();
 app.use(express.json());
 // Configure CORS options
+
+
+// const corsOptions = {
+//   origin: "https://credit-sea-assignment-three.vercel.app", // Allow only this origin
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
+//   credentials: true, // Allow credentials (cookies, authorization headers)
+// };
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000', // Allow local development
+  'https://credit-sea-assignment-three.vercel.app', // Allow your deployed frontend
+];
+
+// CORS options
 const corsOptions = {
-  origin: "https://credit-sea-assignment-three.vercel.app", // Allow only this origin
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
-  credentials: true, // Allow credentials (cookies, authorization headers)
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'], // Allowed methods
+  credentials: true, // Allow cookies to be sent with requests
 };
+
+// Use CORS middleware
+// app.use(cors(corsOptions));
+
 
 app.use(cors(corsOptions)); // Use CORS with specified options
 
