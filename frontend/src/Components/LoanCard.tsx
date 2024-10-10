@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { LoanCardProps } from "../Interface";
 import { getRandomName } from "../Utility";
-import { backendAPI } from '../App'
+import { backendAPI } from '../App';
 
 // Status color based on loan status
 const getStatusColor = (status: string): string => {
@@ -12,12 +12,12 @@ const getStatusColor = (status: string): string => {
     REJECTED: "bg-red-500 text-white",
     VERIFIED: "bg-green-500 text-white", // Add more statuses as needed
   };
-  return statusColors[status] || "bg-gray-500 text-white";
+  return statusColors[status === "" ? "PENDING" : status] || "bg-gray-500 text-white";
 };
 
 const LoanCard: React.FC<LoanCardProps> = ({ loan, actions, role }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(loan.status); // Initialize with loan status
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const actionOptions = role === "verifier"
@@ -36,8 +36,11 @@ const LoanCard: React.FC<LoanCardProps> = ({ loan, actions, role }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Log for debugging
   console.log("name: ", loan.fullName);
   console.log("status: ", status);
+
   // Handle action and status update
   const handleAction = async (action: string) => {
     const statusMap: Record<string, string> = {
@@ -48,10 +51,10 @@ const LoanCard: React.FC<LoanCardProps> = ({ loan, actions, role }) => {
     const updatedStatus = statusMap[action];
     
     try {
-      const officer_name:string = getRandomName();
+      const officer_name: string = getRandomName();
       console.log(role);
       
-      await axios.patch(backendAPI + `/api/loans/${role}`, {
+      await axios.patch(backendAPI + /api/loans/${role}, {
         status: updatedStatus,
         loanOfficer: role === "verifier" ? officer_name : undefined,
         _id: loan._id
@@ -61,12 +64,13 @@ const LoanCard: React.FC<LoanCardProps> = ({ loan, actions, role }) => {
       console.error("Error updating loan status", error);
     }
   };
+
   return (
     <div className="flex justify-between items-center border-b p-4 transition-all duration-200 relative">
       <div className="flex items-center">
         <img
-          src={role === "user" ? `https://i.pravatar.cc/40?u=${loan.loanOfficer}` : 
-            `https://i.pravatar.cc/40?u=${loan.fullName}`}
+          src={role === "user" ? https://i.pravatar.cc/40?u=${loan.loanOfficer} : 
+            https://i.pravatar.cc/40?u=${loan.fullName}}
           alt={loan.loanOfficer}
           className="w-10 h-10 rounded-full mr-4"
         />
@@ -77,8 +81,8 @@ const LoanCard: React.FC<LoanCardProps> = ({ loan, actions, role }) => {
       </div>
       <div className="text-sm text-gray-700">${loan.loanAmount}</div> {/* Use loanAmount here */}
       <div className="text-sm text-gray-500">{new Date(loan.createdAt).toLocaleDateString()}</div> {/* Format createdAt */}
-      <span className={`px-4 py-2 rounded-full text-sm ${getStatusColor(status)}`}>
-        {status === "" ? loan.status : status}
+      <span className={px-4 py-2 rounded-full text-sm ${getStatusColor(status)}}>
+        {status}
       </span>
 
       {actions && (role === "admin" || role === "verifier") && (
